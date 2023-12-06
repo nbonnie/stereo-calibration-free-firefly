@@ -1,4 +1,4 @@
-function [matched_df1, matched_df2, metadata] = matchStereo(df1, df2, stereoParams, dThresh)
+function [matched_df1, matched_df2, metadata] = matchStereo(df1, df2, stereoParams, dk, dThresh)
 % OUTPUT:
 % matched_df1 - (nx2), x-y-t coordinates
 % matched_df2 - (nx2), x-y-t coordinates
@@ -6,12 +6,14 @@ function [matched_df1, matched_df2, metadata] = matchStereo(df1, df2, stereoPara
 % points that are "close enough" together after mapping onto eachother.
 % Close enough is definied by dThresh, used in matlab function matchpairs
 
+% Sync times
+df2(:,3) = df2(:,3)-dk;
 
 % Pull translation and rotation matricies from stereoParams
 translation = stereoParams.t(:);
 Rotation = stereoParams.R;
 
-if nargin == 3
+if nargin == 4
     dThresh = 0.1;
 end
 
