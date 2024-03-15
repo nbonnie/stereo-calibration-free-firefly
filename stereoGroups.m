@@ -12,7 +12,7 @@ strkKernel = max(n);
 % prctile(freq, 75)
 
 % set linkRadiusMtr
-linkRadiusMtr = 0.0025;
+linkRadiusMtr = 0.0045;
 
 % build adjacency matrix
 adj = buildSparseStrkAdj(xyzt,strkKernel,linkRadiusMtr);

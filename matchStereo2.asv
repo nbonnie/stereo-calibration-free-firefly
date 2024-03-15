@@ -1,0 +1,31 @@
+function [matched_df1, matched_df2] = matchStereo2(df1, df2, stereoParams, dk, thresh)
+%
+
+
+% Sync times
+df2(:,3) = df2(:,3)-dk;
+
+% Init vars for loop
+matched_df1 = NaN(min(N1,N2),3);
+matched_df2 = NaN(min(N1,N2),3);
+
+F = stereoParams.F;
+
+for t = intersect( unique(df1(:,3)) , unique(df2(:,3)) )'
+    % Setting up to solve epipolar constraint problem
+    df1_t = df1(df1(:,3)==t, 1:2);
+    df2_t = df2(df2(:,3)==t, 1:2);
+
+    df1_t(:,3) = 1;
+    df2_t(:,3) = 1;
+
+    [matched_df1_t, matched_df2_t, ~] = point_matching_model(df1_t, df2_t, F, thresh);
+    
+    % Append new matched points at time t into complete lists.
+    % No way to pre-allocate as size is not known
+    matched_df1 = [matched_df1; matched_df1_t]; %#ok<AGROW> 
+    matched_df2 = [matched_df2; matched_df2_t]; %#ok<AGROW> 
+
+end
+
+end
