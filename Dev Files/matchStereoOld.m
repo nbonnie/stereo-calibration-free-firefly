@@ -1,4 +1,4 @@
-function [matched_df1, matched_df2, metadata] = matchStereo(df1, df2, stereoParams, dk, dThresh)
+function [matched_df1, matched_df2, metadata] = matchStereoOld(df1, df2, stereoParams, dk, dThresh)
 % OUTPUT:
 % matched_df1 - (nx2), x-y-t coordinates
 % matched_df2 - (nx2), x-y-t coordinates
