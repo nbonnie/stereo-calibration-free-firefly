@@ -17,6 +17,30 @@ xy = xytIn(:,1:2);
 t = xytIn(:,3);
 nPoints = length(t);
 
+
+[vals, xbinedges, ybinedges] = histcounts2(xytIn(:,1), xytIn(:,2), 'BinWidth', [10 10]);
+linearIndices = find(vals>persistentHeightThreshold);
+[xind, yind] = ind2sub(size(vals), linearIndices);
+filteredX = xbinedges(xind);
+filteredY = ybinedges(yind);
+
+good_indices = true(nPoints,1);
+for i=1:length(filteredX)
+    good_indices(xytIn(:,1) >= filteredX(i) & xytIn(:,1) <= filteredX(i)+10 & xytIn(:,2) >= filteredY(i) & xytIn(:,2) <= filteredY(i)+10,1) = false;
+end
+
+
+% %%
+% xytRemoved = xytIn(isTooLong,:);
+% xytOut = xytIn(isNotTooLong,:);
+
+xytOut = xytIn(good_indices,:);
+%scatter(xytOut(:,1),xytOut(:,2), 7, xytOut(:,3));
+
+
+end
+
+
 % 
 % alpha = xy2alpha(xy,[frameWidth frameWidth/2]);
 % nPoints = length(t);
@@ -65,27 +89,3 @@ nPoints = length(t);
 % 
 % isTooLong = ismember(trajID,tooLongTrajID);
 % isNotTooLong = ~isTooLong;
-
-
-[vals, xbinedges, ybinedges] = histcounts2(xytIn(:,1), xytIn(:,2), 'BinWidth', [10 10]);
-linearIndices = find(vals>persistentHeightThreshold);
-[xind, yind] = ind2sub(size(vals), linearIndices);
-filteredX = xbinedges(xind);
-filteredY = ybinedges(yind);
-
-good_indices = true(nPoints,1);
-for i=1:length(filteredX)
-    good_indices(xytIn(:,1) >= filteredX(i) & xytIn(:,1) <= filteredX(i)+10 & xytIn(:,2) >= filteredY(i) & xytIn(:,2) <= filteredY(i)+10,1) = false;
-end
-
-
-% %%
-% xytRemoved = xytIn(isTooLong,:);
-% xytOut = xytIn(isNotTooLong,:);
-
-xytOut = xytIn(good_indices,:);
-%scatter(xytOut(:,1),xytOut(:,2), 7, xytOut(:,3));
-
-
-end
-
